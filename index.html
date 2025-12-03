@@ -1,0 +1,292 @@
+import React, { useState } from 'react';
+import { 
+  Building2, 
+  AlertTriangle, 
+  TrendingUp, 
+  Calculator, 
+  CheckCircle, 
+  XCircle, 
+  Info,
+  ExternalLink,
+  Clock
+} from 'lucide-react';
+
+// --- CONFIGURATION DE LA CHARTE GRAPHIQUE ---
+// Modifiez simplement ces codes couleurs pour appliquer votre identité visuelle
+const CHARTE = {
+  primary: '#F6A020',    // Couleur principale (ex: Bleu roi) - Remplacez par votre code HEX
+  secondary: '#162E4B',  // Couleur secondaire (ex: Teal/Turquoise) pour la 2ème catégorie
+  accent: '#5090CF',     // Couleur d'alerte/accent (ex: Orange/Ambre)
+  textLight: '#FFFFFF',  // Couleur du texte sur fond foncé
+  bgLight: '#EFF6FF'     // Couleur de fond très clair (pour les zones douces)
+};
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('creation');
+
+  // Navigation simple
+  const tabs = [
+    { id: 'creation', label: 'Création & Vie', icon: Building2 },
+    { id: 'seuils', label: 'Seuils CA', icon: TrendingUp },
+    { id: 'social', label: 'Social & Charges', icon: Calculator },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-4 md:p-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+        
+        {/* Header - Utilise la couleur primaire */}
+        <div 
+          className="p-8 text-white transition-colors duration-300"
+          style={{ backgroundColor: CHARTE.primary, color: CHARTE.textLight }}
+        >
+          <h1 className="text-3xl font-bold mb-2">Le Statut Micro-Entrepreneur</h1>
+          <p className="opacity-90">Module : Animer une formation en entrepreneuriat</p>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap border-b border-slate-200">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 py-4 px-6 flex items-center justify-center gap-2 font-medium transition-all duration-200 hover:bg-slate-50`}
+                style={{
+                  color: isActive ? CHARTE.primary : '#64748b',
+                  borderBottom: isActive ? `3px solid ${CHARTE.primary}` : '3px solid transparent',
+                  backgroundColor: isActive ? `${CHARTE.primary}10` : 'transparent' // Astuce: ajoute de la transparence à la couleur hex
+                }}
+              >
+                <tab.icon size={20} />
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Content Area */}
+        <div className="p-6 md:p-8 min-h-[400px]">
+          
+          {/* SECTION 1: CRÉATION & VIE */}
+          {activeTab === 'creation' && (
+            <div className="space-y-6 animate-fadeIn">
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Déclaration et cycle de vie</h2>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Card 1: Registration */}
+                <div 
+                  className="bg-slate-50 p-6 rounded-xl border hover:shadow-md transition-shadow"
+                  style={{ borderColor: `${CHARTE.primary}30`, backgroundColor: `${CHARTE.primary}05` }}
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="p-3 rounded-lg" style={{ backgroundColor: `${CHARTE.primary}20`, color: CHARTE.primary }}>
+                      <Building2 size={24} />
+                    </div>
+                    <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">GRATUIT</span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Inscription</h3>
+                  <p className="text-slate-600 mb-4">
+                    La déclaration d'activité est gratuite et se fait obligatoirement auprès du guichet unique (INPI).
+                  </p>
+                  <a 
+                    href="https://procedures.inpi.fr/?/" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="inline-flex items-center font-semibold hover:underline"
+                    style={{ color: CHARTE.primary }}
+                  >
+                    Accéder au site INPI <ExternalLink size={16} className="ml-1" />
+                  </a>
+                </div>
+
+                {/* Card 2: Radiation */}
+                <div 
+                  className="p-6 rounded-xl border hover:shadow-md transition-shadow"
+                  style={{ borderColor: `${CHARTE.accent}30`, backgroundColor: `${CHARTE.accent}05` }}
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="p-3 rounded-lg" style={{ backgroundColor: `${CHARTE.accent}20`, color: CHARTE.accent }}>
+                      <Clock size={24} />
+                    </div>
+                    <span className="text-xs font-bold px-2 py-1 rounded-full" style={{ backgroundColor: `${CHARTE.accent}20`, color: CHARTE.accent }}>ATTENTION</span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Règle d'inactivité</h3>
+                  <p className="text-slate-600">
+                    Radiation automatique en cas de chiffre d'affaires nul (0 €) pendant :
+                  </p>
+                  <div className="mt-4 text-center">
+                    <span className="text-4xl font-bold" style={{ color: CHARTE.accent }}>2 ans</span>
+                    <p className="text-sm font-medium" style={{ color: CHARTE.accent }}>consécutifs</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 2: SEUILS CA */}
+          {activeTab === 'seuils' && (
+            <div className="animate-fadeIn">
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">Plafonds de Chiffre d'Affaires</h2>
+              <p className="text-slate-500 mb-8">Le statut n'est accessible que si le CA annuel HT ne dépasse pas :</p>
+
+              <div className="space-y-8">
+                {/* Category 1 */}
+                <div className="relative">
+                  <div className="flex justify-between items-end mb-2">
+                    <div>
+                      <h3 className="font-bold text-lg" style={{ color: CHARTE.primary }}>1ère Catégorie</h3>
+                      <p className="text-sm text-slate-500">Vente marchandises, fourniture de logement*</p>
+                    </div>
+                    <span className="text-2xl font-bold" style={{ color: CHARTE.primary }}>188 700 €</span>
+                  </div>
+                  <div className="h-4 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-full w-full rounded-full transition-all duration-1000" style={{ backgroundColor: CHARTE.primary }}></div>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">*Hors location meublée (sauf tourisme/chambre d'hôte)</p>
+                </div>
+
+                {/* Category 2 */}
+                <div className="relative">
+                  <div className="flex justify-between items-end mb-2">
+                    <div>
+                      <h3 className="font-bold text-lg" style={{ color: CHARTE.secondary }}>2ème Catégorie</h3>
+                      <p className="text-sm text-slate-500">Prestations de services (BIC/BNC)</p>
+                    </div>
+                    <span className="text-2xl font-bold" style={{ color: CHARTE.secondary }}>77 700 €</span>
+                  </div>
+                  <div className="h-4 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-full w-[41%] rounded-full relative transition-all duration-1000" style={{ backgroundColor: CHARTE.secondary }}>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-100 p-4 rounded-lg flex gap-3 items-start mt-6">
+                  <Info className="text-slate-500 flex-shrink-0 mt-1" size={20} />
+                  <p className="text-sm text-slate-600">
+                    Si vous dépassez ces seuils, vous basculez vers le régime réel d'imposition (entreprise individuelle classique).
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 3: SOCIAL & CHARGES */}
+          {activeTab === 'social' && (
+            <div className="animate-fadeIn space-y-8">
+              <div className="flex items-center gap-3 mb-6">
+                <h2 className="text-2xl font-bold text-slate-800">Le Régime Micro-Social</h2>
+              </div>
+
+              {/* The Mechanics */}
+              <div className="grid md:grid-cols-2 gap-8">
+                
+                {/* Mechanism 1: Calculation */}
+                <div className="bg-white border-2 border-slate-100 rounded-xl p-6 relative overflow-hidden group hover:border-opacity-50 transition-colors"
+                     style={{ borderColor: `${CHARTE.primary}20` }}>
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity" style={{ color: CHARTE.primary }}>
+                    <Calculator size={100} />
+                  </div>
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold"
+                          style={{ backgroundColor: `${CHARTE.primary}20`, color: CHARTE.primary }}>1</span>
+                    Calcul simplifié
+                  </h3>
+                  <p className="text-slate-600 mb-4">
+                    Les cotisations sont calculées directement sur le <strong>Chiffre d'Affaires encaissé (HT)</strong>.
+                  </p>
+                  <div className="bg-slate-50 p-3 rounded text-center font-mono text-sm border border-slate-200">
+                    CA Encaissé x Taux % = Cotisations
+                  </div>
+                </div>
+
+                {/* Mechanism 2: No Deduction */}
+                <div className="bg-white border-2 border-slate-100 rounded-xl p-6 relative overflow-hidden group hover:border-red-100 transition-colors">
+                  <div className="absolute top-0 right-0 p-4 text-red-500 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <XCircle size={100} />
+                  </div>
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span className="bg-red-100 text-red-700 w-8 h-8 flex items-center justify-center rounded-full text-sm">2</span>
+                    Aucune déduction
+                  </h3>
+                  <p className="text-slate-600">
+                    Contrairement au réel, <strong>vous ne pouvez déduire aucune charge</strong> (loyer, matériel, déplacements) de votre CA.
+                  </p>
+                </div>
+              </div>
+
+              {/* The Warning Section */}
+              <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg flex gap-4 items-start">
+                <AlertTriangle className="text-red-500 flex-shrink-0" size={28} />
+                <div>
+                  <h3 className="font-bold text-red-800 text-lg">Attention : Pas de CA = Pas de droits</h3>
+                  <p className="text-red-700 mt-1">
+                    Si vous ne déclarez aucun chiffre d'affaires, vous ne payez aucune cotisation sociale, mais vous ne validez <strong>aucun trimestre de retraite</strong> et n'avez <strong>pas de couverture sociale</strong> liée à cette activité.
+                  </p>
+                </div>
+              </div>
+
+              {/* Interactive Quiz Mini */}
+              <div className="mt-8 pt-8 border-t border-slate-200">
+                <h3 className="text-lg font-bold mb-4">Avez-vous compris ?</h3>
+                <QuizComponent charte={CHARTE} />
+              </div>
+
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Sub-component for the interactive quiz logic
+const QuizComponent = ({ charte }) => {
+  const [feedback, setFeedback] = useState(null); // 'correct' | 'incorrect' | null
+
+  const handleTest = (isCorrect) => {
+    setFeedback(isCorrect ? 'correct' : 'incorrect');
+    setTimeout(() => setFeedback(null), 3000); // Reset after 3 seconds
+  };
+
+  return (
+    <div className="rounded-xl p-6" style={{ backgroundColor: `${charte.primary}10` }}>
+      <p className="font-medium mb-4">
+        Situation : J'ai acheté un ordinateur à 1000€ pour mon entreprise. Puis-je déduire ces 1000€ de mon Chiffre d'Affaires avant de payer mes cotisations ?
+      </p>
+      
+      <div className="flex gap-4">
+        <button 
+          onClick={() => handleTest(false)}
+          className="bg-white hover:bg-slate-100 text-slate-700 font-bold py-2 px-6 rounded-lg shadow-sm border border-slate-200 transition-colors flex-1"
+        >
+          Oui, c'est une charge pro
+        </button>
+        <button 
+          onClick={() => handleTest(true)}
+          className="text-white font-bold py-2 px-6 rounded-lg shadow-md transition-colors flex-1 hover:opacity-90"
+          style={{ backgroundColor: charte.primary }}
+        >
+          Non, impossible
+        </button>
+      </div>
+
+      {feedback === 'correct' && (
+        <div className="mt-4 flex items-center gap-2 text-green-700 bg-green-100 p-3 rounded animate-fadeIn">
+          <CheckCircle size={20} />
+          <span><strong>Bravo !</strong> En micro-entreprise, on cotise sur le CA brut. Aucune charge n'est déductible.</span>
+        </div>
+      )}
+
+      {feedback === 'incorrect' && (
+        <div className="mt-4 flex items-center gap-2 text-red-700 bg-red-100 p-3 rounded animate-fadeIn">
+          <XCircle size={20} />
+          <span><strong>Faux.</strong> C'est la spécificité du régime : on ne peut RIEN déduire, même les frais professionnels nécessaires.</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
